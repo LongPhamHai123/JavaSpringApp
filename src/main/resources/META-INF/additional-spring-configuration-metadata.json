@@ -1,0 +1,17 @@
+{"properties": [{
+  "name": "spring.session.mongodb.collection-name",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.session.mongodb.collection-name'"
+}]}{"properties": [{
+  "name": "spring.session.store-type",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.session.store-type'"
+}]}{"properties": [{
+  "name": "spring.session.store-type",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.session.store-type'"
+}]}{"properties": [{
+  "name": "spring.session.store-type",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.session.store-type'"
+}]}
