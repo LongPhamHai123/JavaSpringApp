@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 //This is executed once per HttpRequest
 @Component
@@ -24,20 +25,40 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    private static final List<String> PUBLIC_URLS = List.of(
+            "/api/register",
+            "/api/auth/login"
+    );
 
-
+    // @Override
+    // protected boolean shouldNotFilter(HttpServletRequest request) {
+    //     String path = request.getServletPath();
+    //     return PUBLIC_URLS.contains(path);
+    // }
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        // String path = request.getServletPath();
+
+        // 👇 Cho phép login & register đi qua không cần token
+        // if (PUBLIC_URLS.contains(path)) {
+        //     filterChain.doFilter(request, response);
+        //     return;
+        // }
+
         String header = request.getHeader("Authorization");
         log.info("Calling Auth token filter for url --> {}", request.getRequestURI());
         if (header == null || !header.startsWith("Bearer ")) {
             // throw new RuntimeException("Missing Authorization header");
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Missing or invalid token\"}");
+            // response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            // response.setContentType("application/json");
+            // response.getWriter().write("{\"error\": \"Missing or invalid token\"}");
+            // return;
+            filterChain.doFilter(request, response);
             return;
+
         }
         //Get the token from header
         String jwtToken = jwtUtils.getJwtDetailsFromHeader(request);
@@ -60,6 +81,5 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
 
 }

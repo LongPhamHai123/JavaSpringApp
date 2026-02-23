@@ -42,19 +42,20 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Disable for API testing, enable in production
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**", "/api/register", "/api/public/**").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                // .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                // .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                 // .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-            // .exceptionHandling(exception -> 
-            //     exception.authenticationEntryPoint((request, response, authException) -> {
-            //         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
-            //                         "Internal Server Error");
-            //     })
-            // );
+            .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(exception -> 
+                exception.authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\":\"Unauthorized\"}");
+                })
+            );
             // .httpBasic(Customizer.withDefaults());
         return http.build();
     }
@@ -65,6 +66,7 @@ public class SecurityConfig {
     }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        log.info("Setting up AuhenticationManager");
         return authConfig.getAuthenticationManager();
     }
     @Bean

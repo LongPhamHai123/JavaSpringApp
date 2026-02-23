@@ -101,7 +101,8 @@ public class AuthController {
     // }
     @GetMapping("/public/hello")
     public String publicEndpoint() {
-        return "This is a public endpoint - no authentication required";
+        // return "This is a public endpoint - no authentication required";
+        throw new RuntimeException("This is an error");
     }
 
     @GetMapping("/user/profile")

@@ -11,4 +11,11 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 # Access protected endpoint (include session cookie from login)
 curl -X GET http://localhost:8080/api/user/profile \
-  -H "Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc3MTIzNjMzNiwiaWF0IjoxNzcxMjM2MDM2fQ.1v7BJjFTIn9l9mfrOWPo5Q2hOJNsQvKxih1aWURcJhF1gZhISFov4XD_rv2wROWB"
+  -H "Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc3MTgyMDE3NCwiaWF0IjoxNzcxODE5ODc0fQ.e4gzFzgU3xvSRIzyTg0GCbVv5kTdotybnUiuizetXtY2EzUx8TxKoH8RjfdkyHcr"
+
+curl -X GET http://localhost:8080/api/public/hello
+
+# Login
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser1","password":"password123"}'
